@@ -7,6 +7,7 @@ import com.liskovsoft.youtubeapi.service.internal.MediaServiceData
 
 internal class MediaGroupOptions private constructor(val removeShorts: Boolean = false,
                                       val removeLive: Boolean = false,
+                                      val removeStreamed: Boolean = false,
                                       val removeUpcoming: Boolean = false,
                                       val removeWatched: Boolean = false,
                                       val removeMixes: Boolean = false,
@@ -26,6 +27,7 @@ internal class MediaGroupOptions private constructor(val removeShorts: Boolean =
                     || (MediaGroup.TYPE_SEARCH == groupType && data.isContentHidden(MediaServiceData.CONTENT_SHORTS_SEARCH))
                     || (MediaGroup.TYPE_NEWS == groupType && data.isContentHidden(MediaServiceData.CONTENT_SHORTS_NEWS))
             val removeLive = (MediaGroup.TYPE_SUBSCRIPTIONS == groupType && data.isContentHidden(MediaServiceData.CONTENT_STREAMS_SUBSCRIPTIONS))
+            val removeStreamed = (MediaGroup.TYPE_SUBSCRIPTIONS == groupType && data.isContentHidden(MediaServiceData.CONTENT_STREAMED_SUBSCRIPTIONS))
             val removeUpcoming = (MediaGroup.TYPE_SUBSCRIPTIONS == groupType && data.isContentHidden(MediaServiceData.CONTENT_UPCOMING_SUBSCRIPTIONS)) ||
                     (MediaGroup.TYPE_CHANNEL == groupType && data.isContentHidden(MediaServiceData.CONTENT_UPCOMING_CHANNEL)) ||
                     (MediaGroup.TYPE_CHANNEL_UPLOADS == groupType && data.isContentHidden(MediaServiceData.CONTENT_UPCOMING_CHANNEL)) ||
@@ -42,6 +44,7 @@ internal class MediaGroupOptions private constructor(val removeShorts: Boolean =
             return MediaGroupOptions(
                 removeShorts,
                 removeLive,
+                removeStreamed,
                 removeUpcoming,
                 removeWatched,
                 removeMixes,

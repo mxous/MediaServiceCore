@@ -12,6 +12,7 @@ internal abstract class BaseMediaGroup(private val options: MediaGroupOptions): 
         it.isEmpty()
                 || (options.removeShorts && it.isShorts())
                 || (options.removeLive && it.isLive())
+                || (options.removeStreamed && it.isStreamed())
                 || (options.removeUpcoming && it.isUpcoming())
                 || (options.removeWatched && (it.getPercentWatched() ?: 0) > 80 && !it.isLive())
                 || (options.removeMixes && it.isMix())

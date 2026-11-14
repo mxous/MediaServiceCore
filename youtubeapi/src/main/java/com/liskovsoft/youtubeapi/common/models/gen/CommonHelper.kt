@@ -18,6 +18,8 @@ private const val BADGE_STYLE_LIVE = "LIVE"
 private const val BADGE_STYLE_UPCOMING = "UPCOMING"
 private const val BADGE_STYLE_SHORTS = "SHORTS"
 private const val BADGE_STYLE_DEFAULT = "DEFAULT"
+// Livestream VODs have no dedicated marker. The only difference is the published time (e.g. "Streamed 2 hours ago")
+private const val PUBLISHED_TIME_STREAMED = "Streamed"
 // A badge before the subtitle
 private const val STATUS_STYLE_MOVIE = "BADGE_STYLE_TYPE_YPC" // This mark sometimes presents on regular videos (e.g. fundraiser mark)
 private const val STATUS_STYLE_QUALITY = "BADGE_STYLE_TYPE_SIMPLE"
@@ -124,6 +126,7 @@ internal fun VideoItem.getPlaylistId() = navigationEndpoint?.getPlaylistId()
 internal fun VideoItem.getPlaylistIndex() = navigationEndpoint?.getIndex()
 internal fun VideoItem.isLive(): Boolean = STATUS_STYLE_LIVE == getStatusStyle() || BADGE_STYLE_LIVE == getBadgeStyle()
 internal fun VideoItem.isUpcoming() = BADGE_STYLE_UPCOMING == getBadgeStyle()
+internal fun VideoItem.isStreamed() = getPublishedTimeText()?.startsWith(PUBLISHED_TIME_STREAMED) ?: false
 internal fun VideoItem.isShorts() = BADGE_STYLE_SHORTS == getBadgeStyle()
 internal fun VideoItem.isMovie() = STATUS_STYLE_MOVIE == getStatusStyle() && getVideoId() == null
 internal fun VideoItem.getFeedbackTokens() = menu?.getFeedbackTokens()
@@ -221,6 +224,8 @@ internal fun TileItem.getContentType() = contentType
 internal fun TileItem.getRichTextTileText() = header?.richTextTileHeaderRenderer?.textContent?.get(0)?.getText()
 internal fun TileItem.getContinuationToken() = onSelectCommand?.getContinuations()?.getContinuationToken()
 internal fun TileItem.isUpcoming() = BADGE_STYLE_UPCOMING == getBadgeStyle()
+internal fun TileItem.isStreamed() = metadata?.tileMetadataRenderer?.lines?.lastOrNull()?.lineRenderer?.items?.lastOrNull()
+    ?.lineItemRenderer?.text?.getText()?.startsWith(PUBLISHED_TIME_STREAMED) ?: false
 internal fun TileItem.isMovie() = STATUS_STYLE_MOVIE == getStatusStyle() && getVideoId() == null // a movie has browseId instead of videoId
 internal fun TileItem.isShorts() = BADGE_STYLE_SHORTS == getBadgeStyle() || TILE_STYLE_SHORTS == getTileStyle()
         || REEL_STYLE_SHORTS == getReelStyle()
@@ -347,6 +352,7 @@ internal fun ItemWrapper.getChannelParams() = getTileItem()?.getChannelParams()
 internal fun ItemWrapper.getPlaylistIndex() = getVideoItem()?.getPlaylistIndex() ?: getMusicItem()?.getPlaylistIndex() ?: getTileItem()?.getPlaylistIndex()
 internal fun ItemWrapper.isLive() = getVideoItem()?.isLive() ?: getMusicItem()?.isLive() ?: getTileItem()?.isLive() ?: getLockupItem()?.isLive() ?: false
 internal fun ItemWrapper.isUpcoming() = getVideoItem()?.isUpcoming() ?: getMusicItem()?.isUpcoming() ?: getTileItem()?.isUpcoming() ?: false
+internal fun ItemWrapper.isStreamed() = getVideoItem()?.isStreamed() ?: getTileItem()?.isStreamed() ?: false
 internal fun ItemWrapper.isMovie() = getVideoItem()?.isMovie() ?: getTileItem()?.isMovie() ?: false
 internal fun ItemWrapper.isShorts() = reelItemRenderer != null || shortsLockupViewModel != null || getVideoItem()?.isShorts() ?: getTileItem()?.isShorts() ?: false
 internal fun ItemWrapper.isMix() = getTileItem()?.isMix() ?: false
